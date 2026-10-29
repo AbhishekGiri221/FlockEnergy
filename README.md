@@ -4,25 +4,26 @@ A simple REST API built with Node.js, Express and TypeScript to access meter and
 
 Setup:
 
-npm install
-Create a .env file:
-PORT=3000
-PORTAL_BASE_URL=https://urja-ops.flockenergy.tech
-PORTAL_EMAIL=operator@urja.local 
-PORTAL_PASSWORD=urja-ops-2026
+npm install  
+
+Create a .env file:    
+PORT=3000  
+PORTAL_BASE_URL=https://urja-ops.flockenergy.tech  
+PORTAL_EMAIL=operator@urja.local   
+PORTAL_PASSWORD=urja-ops-2026  
 
 
-Start the API:
-npm run dev
+Start the API:  
+npm run dev  
 
 API endpoints:
-Method	    Endpoint	                                Description
-GET	        /app/meters/export?page=1&search=J100000	List or search meters (search optional)
-GET	        /app/meters/:meterId	                    Meter details
-GET	        /app/meters/:meterId/energy	                Energy readings
-GET	        /app/meters/:meterId/location	            Meter coordinates
-GET	        /app/transformers?page=1	                List transformers
-GET	        /app/transformers/:dtCode?page=1	        Find a transformer on a given page
+Method	    Endpoint	                                Description  
+GET	        /app/meters/export?page=1&search=J100000	List or search meters (search optional)  
+GET	        /app/meters/:meterId	                    Meter details  
+GET	        /app/meters/:meterId/energy	                Energy readings  
+GET	        /app/meters/:meterId/location	            Meter coordinates  
+GET	        /app/transformers?page=1	                List transformers  
+GET	        /app/transformers/:dtCode?page=1	        Find a transformer on a given page  
 
 
 Example: GET http://localhost:3000/app/meters/J100000

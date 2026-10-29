@@ -46,18 +46,50 @@ export const loginToPortal = async () => {
     return sessionCookie;
 }
 
-export const fetchMeters = async()=>{
+export const fetchMeters = async(pageNumber: number) =>{
     const sessionCookie = await loginToPortal();
 
     if(!sessionCookie){
         throw new Error("Unauthorized");
     }
 
-    const result = await portalApi.get("/portal/meters/search?q=&page=1",{
+    const result = await portalApi.get(`/portal/meters/search?q=&page=${pageNumber}`,{
         headers:{
             cookie: sessionCookie
         }
     })
 
     console.log(result.data);
+    return result.data;
+}
+
+export const fetchMeterInfo = async(meterId: string) =>{
+    const sessionCookie = await loginToPortal();
+
+    if(!sessionCookie){
+        throw new Error("Unauthorized");
+    }
+
+    const result = await portalApi.get(`/meters/${meterId}/__data.json?x-sveltekit-invalidated=001`,{
+        headers:{
+            cookie: sessionCookie
+        }}
+    )
+
+    return result.data;
+}
+
+export const fetchEnergyConsumption = async(meterId: string) =>{
+    const sessionCookie = await loginToPortal();
+
+    if(!sessionCookie){
+        throw new Error("Unauthorized");
+    }
+    const result = await portalApi.get(`/portal/meters/${meterId}/energy`,{
+        headers:{
+            cookie: sessionCookie
+        }
+    })
+
+    return result.data;
 }

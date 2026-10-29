@@ -4,8 +4,8 @@ export const decodeMeter = (response: any) =>{
 
     const values = response.nodes[2].data;
 
-    const meterId = JSON.stringify(values[1]);
-
+    const meterId = values[1];
+    // console.log("---->",meterId)
     const details: Record< string,unknown> = {}
 
     const dataObject = values[values[0].detail].data
@@ -33,5 +33,5 @@ export const decodeMeter = (response: any) =>{
         hierarchy[key] = values[Number(index)];
     }
     
-    return {details, hierarchy};
+    return {meterId, details, hierarchy};
 }

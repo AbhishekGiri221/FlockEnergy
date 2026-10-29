@@ -1,84 +1,48 @@
-first made Api for logging into the portal to get sessio cookie to validate session requesting for data 
+Flock Energy Meter API
 
-1. The first api that i am creating is about fetching meter details 
-{
-    "type": "data",
-    "nodes": [
-        {"type": "skip"},
-        { "type": "skip"},
-        {"type": "data","data": 
-        [
-                {"meterId": 1,"detail": 2,"hierarchy": 21},
-                "J100000",
-                {"data": 3},
-                [
-                    4,
-                    6,
-                    9,
-                    12,
-                    15,
-                    18
-                ],
-                {
-                    "parameterName": 5,
-                    "parameterValue": 1
-                },
-                "Meter ID",
-                {
-                    "parameterName": 7,
-                    "parameterValue": 8
-                },
-                "Serial No",
-                "SE33962",
-                {
-                    "parameterName": 10,
-                    "parameterValue": 11
-                },
-                "Make",
-                "HPL",
-                {
-                    "parameterName": 13,
-                    "parameterValue": 14
-                },
-                "Phase Type",
-                "single",
-                {
-                    "parameterName": 16,
-                    "parameterValue": 17
-                },
-                "Installation Status",
-                "Decommissioned",
-                {
-                    "parameterName": 19,
-                    "parameterValue": 20
-                },
-                "Installation Type",
-                "Whole Current",
-                { --> heirarichy
-                    "Meter ID": 1,
-                    "Installation Status": 17,
-                    "Installation Type": 20,
-                    "Zone": 22,
-                    "Circle": 23,
-                    "Division": 24,
-                    "Subdivision": 25,
-                    "Sub Station": 26,
-                    "Feeder": 27,
-                    "DT": 28
-                },
-                "Jaipur Zone 1 (Z-01)",
-                "Circle 1 (C-01)",
-                "Division 1 (D-01)",
-                "Subdivision 1 (SD-01)",
-                "Substation 1 (SS-01)",
-                "Feeder 1 (F-001)",
-                "Malviya Nagar DT 1 (DT-001)"
-            ],
-            "uses": {
-                "params": [
-                    "id"
-                ]
-            }
-        }
-    ]
-}
+A simple REST API built with Node.js, Express and TypeScript to access meter and transformer data from the Urja Meter Ops portal.
+
+Setup:
+
+npm install
+Create a .env file:
+PORT=3000
+PORTAL_BASE_URL=https://urja-ops.flockenergy.tech
+PORTAL_EMAIL=operator@urja.local 
+PORTAL_PASSWORD=urja-ops-2026
+
+
+Start the API:
+npm run dev
+
+API endpoints:
+Method	    Endpoint	                                Description
+GET	        /app/meters/export?page=1&search=J100000	List or search meters (search optional)
+GET	        /app/meters/:meterId	                    Meter details
+GET	        /app/meters/:meterId/energy	                Energy readings
+GET	        /app/meters/:meterId/location	            Meter coordinates
+GET	        /app/transformers?page=1	                List transformers
+GET	        /app/transformers/:dtCode?page=1	        Find a transformer on a given page
+
+
+Example: GET http://localhost:3000/app/meters/J100000
+
+The transformer detail route only checks the requested page, not all pages. Transformer routes require page; meter listing defaults to page 1.
+
+
+How it works:
+
+The request goes through route → controller → service → portal API. The API logs into the portal using environment variables and sends the session cookie with data requests. A small decoder converts the portal's indexed SvelteKit meter-details response into readable JSON.
+
+Tests:
+npm test
+
+The current tests cover meter decoding, meter listing, empty search results, search/pagination parameters, and meter details. API tests use mocked services, so they do not need portal access.
+Decisions and limitations
+- Used the portal endpoints observed during investigation; details are in PROTOCOL.md.
+- Used controller-level try/catch for simplicity. Error responses could be made more consistent.
+- The current code logs in for each portal request; session caching would improve performance.
+- Transformer details are searched within one page only.
+- Some energy and location values remain strings, as returned by the portal.
+- More validation, error-case tests, and missing-record handling would improve reliability.
+openapi.json describes the public API routes and expected responses. It should match the final implementation.

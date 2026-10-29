@@ -1,25 +1,8 @@
-import express from "express";
-import "dotenv/config"
-import meterRoutes from "./router/meterRoutes.js"
-import { fetchMeterInfo } from "./utils/portalApi.js";
+import "dotenv/config";
+import app from "./app.js";
 
-const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json())
-app.use(meterRoutes);
-
-
-
-app.listen(PORT,async()=>{
-    console.log("Listening to server")
-// try {
-//         await fetchMeterInfo("J100020");
-//     } catch (error) {
-//        console.log(error); 
-//     }
-
-})
-
-
-
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});

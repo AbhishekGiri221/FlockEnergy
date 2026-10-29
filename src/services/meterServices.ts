@@ -1,9 +1,13 @@
 import { decodeMeter } from "../utils/decodeMeter.js";
-import { fetchEnergyConsumption, fetchMeterInfo, fetchMeters } from "../utils/portalApi.js"
+import { fetchEnergyConsumption, fetchMeterInfo, fetchMeters, meterLocation } from "../utils/portalApi.js"
 
-export const getAllMetersServices = async (pageNumber: number)=>{
-    const  meters = await fetchMeters(pageNumber);
+export const getAllMetersServices = async (search: string, pageNumber: number)=>{
+    const  meters = await fetchMeters(search, pageNumber);
 
+    // if(meters.data.length <= 0){
+    //     throw new Error("No meter found with the meter number")
+    // }
+    
     return meters;
 }
 
@@ -15,7 +19,13 @@ export const getMeterDetailsServices = async(meterId: string) =>{
 }
 
 export const energyConsumptionServices = async(meterId: string)=>{
-    const result = await fetchEnergyConsumption(meterId);
+    const energyConsumption = await fetchEnergyConsumption(meterId);
 
-    return result
+    return energyConsumption;
+}
+
+export const getMeterLocationServices = async(meterId: string) => {
+    const locationDetails = await meterLocation(meterId);
+
+    return locationDetails;
 }

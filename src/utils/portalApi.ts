@@ -16,7 +16,7 @@ export const loginToPortal = async () => {
     formData.append("email", email)
     formData.append("password", password)
 
-    console.log(formData);
+
 
     const result = await portalApi.post("/login", formData, {
         headers: {
@@ -46,20 +46,19 @@ export const loginToPortal = async () => {
     return sessionCookie;
 }
 
-export const fetchMeters = async(pageNumber: number) =>{
+export const fetchMeters = async(search: string, pageNumber: number) =>{
     const sessionCookie = await loginToPortal();
 
     if(!sessionCookie){
         throw new Error("Unauthorized");
     }
 
-    const result = await portalApi.get(`/portal/meters/search?q=&page=${pageNumber}`,{
+    const result = await portalApi.get(`/portal/meters/search?q=${search}&page=${pageNumber}`,{
         headers:{
             cookie: sessionCookie
         }
     })
 
-    console.log(result.data);
     return result.data;
 }
 
@@ -93,3 +92,38 @@ export const fetchEnergyConsumption = async(meterId: string) =>{
 
     return result.data;
 }
+
+
+export const meterLocation = async(meterId: string) =>{
+    const sessionCookie = await loginToPortal();
+
+    if(!sessionCookie){
+        throw new Error("Unauthorized");
+    }
+    
+    const result = await portalApi.get(`/portal/meters/${meterId}/geo`,{
+        headers:{
+            cookie: sessionCookie
+        }
+    })
+
+    return (result.data);
+
+} 
+
+export const fetchTransformers = async(pageNumber: string) =>{
+    const sessionCookie = await loginToPortal();
+
+    if(!sessionCookie){
+        throw new Error("Unauthorized");
+    }
+
+    const result = await portalApi.get(`/portal/dts?page=${pageNumber}`,{
+        headers:{
+            cookie: sessionCookie
+        }
+    });
+
+    return result.data;
+}
+

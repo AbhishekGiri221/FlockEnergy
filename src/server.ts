@@ -1,21 +1,25 @@
 import express from "express";
 import "dotenv/config"
+import { fetchMeters, loginToPortal } from "./utils/portalApi.js";
 
 const app = express()
 
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    message: "Flock Meter API is running",
-  });
-});
+app.use(express.json())
+// app.use(authRoutes)
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, async () => {
+  console.log(`Server running on port ${PORT}`);
 
-app.listen(PORT,()=>{
-    console.log("listening to the port");
-})
+  try {
+    await fetchMeters();
+
+  } catch (error) {
+
+    if(error instanceof Error){
+        console.log(error.message);
+    }
+  }
+
+});
